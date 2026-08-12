@@ -1,0 +1,151 @@
+
+# Theme: Pixel Computer
+# Version 1.0
+# Last Update: 06Dec25
+# License: CC-BY-SA 3.0
+# By: Monica G.
+# Description: Simple pixel art of an old PC! Changing the background color changes some elements in the WPS, but kept all other menus/screens grey-scale.
+# Code based on OneBit_OLED by Jihoon Kim and SNARTY by Simon Anden!
+# Icons/elements also altered from OneBit_OLED by Jihoon Kim and SNARTY by Simon Anden!
+
+# Disable Status Bar
+%wd
+
+# Backdrop Image
+%xl(pc_wps,pc_wps.bmp,0,0)
+
+# Clear Backdrop
+%V(0,0,-,-,-)%VB
+%xd(pc_wps)
+%V(0,0,-,-,-)
+
+# Preload Fonts
+%Fl(2,07-LanaPixel.fnt)
+%Fl(3,14-Terminus.fnt)
+%Fl(4,14-LanaPixel.fnt)
+
+# Preload Images
+%xl(battery,battery.bmp,0,0,12)
+%xl(playmodes_wps,playmodes_wps.bmp,0,0,9)
+%xl(vb_back,vb_back.bmp,0,0)
+%xl(vb,vb.bmp,0,0)
+%xl(pb_back,pb_back.bmp,0,0)
+%xl(pb,pb.bmp,0,0)
+%xl(R,repeat_status_wps.bmp,0,0,5)
+%xl(S,shuffle_wps.bmp,0,0,2)
+%xl(lock,lock.bmp,0,0,2)
+%xl(X,seeking_icon.bmp,0,0,2)
+%xl(slider,slider.bmp,0,0)
+%xl(L,lossless.bmp,0,0)
+
+# Album Art
+%Cl(0,0,94,94,c,c)
+%?and(%C,%if(%St(volume display), =, graphic))<%Vd(albumArt)>
+%Vl(albumArt,214,34,100,100,-)
+%Cd
+
+
+## Icons ##
+
+#Hold Status
+%V(257,1,11,14,-)
+%?mh<%xd(lock,1)|%xd(lock,2)>
+%V(216,0,40,13,2)%Vf(ffffff)
+%?mh<%acLOCKED|>
+
+# Storage Access
+%V(205,1,12,12,-)
+%?lh<%t(0.1)%xd(X,1);%t(0.1)%xd(X,2)|>
+
+# Playback Icons
+%V(5,20,22,22,-)
+%?if(%mp, >, 1)<%xd(playmodes_wps,%mp)|>
+
+# Repeat Icon
+%V(30,20,22,22,-)
+%?mm<%xd(R,1)|%xd(R,2)|%xd(R,3)|%xd(R,4)|%xd(R,5)>
+
+# Shuffle Icon
+%V(55,20,22,22,-)
+%?ps<%xd(S,2)|%xd(S,1)>
+
+# Battery viewport selector (flash when low, animates when charging)
+%?bc<%Vd(battCharging)|%?if(%bl,>=,15)<%Vd(batt)|%Vd(lowBatt)>>
+
+# Battery (graphical)
+%Vl(batt,295,3,23,10,-)
+%Vf(-)
+%?bl<%xd(battery,1)|%xd(battery,2)|%xd(battery,3)|%xd(battery,4)|%xd(battery,5)|%xd(battery,6)|%xd(battery,7)|%xd(battery,8)|%xd(battery,9)|%xd(battery,10)|%xd(battery,11)>
+
+%Vl(lowBatt,295,3,23,10,-)
+%Vf(-)
+%t(1)%?if(%bl,>=,10)<%xd(battery,2)|%xd(battery,1)>;%t(1)%xd(battery,12)
+
+%Vl(battCharging,295,3,23,10,-)
+%Vf(-)
+%t(0.1)%?bl<%xd(battery,1)|%xd(battery,2)|%xd(battery,3)|%xd(battery,4)|%xd(battery,5)|%xd(battery,6)|%xd(battery,7)|%xd(battery,8)|%xd(battery,9)|%xd(battery,10)|%xd(battery,11)>;%t(0.1)%?bl<%xd(battery,4)|%xd(battery,5)|%xd(battery,6)|%xd(battery,7)|%xd(battery,8)|%xd(battery,9)|%xd(battery,10)|%xd(battery,11)>;%t(0.1)%?bl<%xd(battery,8)|%xd(battery,9)|%xd(battery,10)|%xd(battery,11)>;%t(1)%xd(battery,11)
+
+# Clock
+%V(5,0,40,13,2)%Vf(ffffff)
+%al%?cf<%cH|%cl>:%cM%?cf<| %cP>
+
+# Battery (numerical)
+%V(266,0,27,13,2)%Vf(ffffff)
+%ar%bl%%
+
+# Volume Level Text
+%V(161,14,30,13,2)%Vf(ffffff)
+%ar%?if(%pv, >, 0)<+|>%pvdB
+
+%V(90,14,40,13,2)%Vf(ffffff)
+%alVOLUME
+
+#__Volume Bar
+%V(90,29,100,18,-)
+%pv(0,0,100,18,vb,pc_wps,vb_back)
+
+# Progress Bar
+%V(35,234,250,3,0)
+%pb(0,0,250,3,pb,pc_wps,pb_back)
+
+# Song Current Time
+%V(2,227,32,13,2)%Vf(ffffff)
+%ac%pc
+
+# Song Remaining Time
+%V(284,227,32,13,2)%Vf(ffffff)
+%ac%pt
+
+## Content ##
+
+# Song Title
+%V(10,78,180,30,4)%Vf(ffffff)
+%al%s%?it<%s%it|%fn>
+
+# Album
+%V(10,60,180,18,3)%Vf(ffffff)
+%al%s%?id<%id|Unknown Album>
+
+# Artist
+%V(10,110,180,18,3)%Vf(ffffff)
+%al%s%?ia<%ia>
+
+# Track Details
+%V(10,130,180,15,2)%Vf(ffffff)
+%al%?fc<MP1|MP2|MP3|AIFF|WAV|VORBIS|FLAC|MPC|AC3|WAVPACK|ALAC|AAC|SHORTEN|SID|ADX|NSF|SPEEX|SPC|APE|WMA|WMAPRO|MOD|SAP|COOK|AAC|AC3|ATRAC3|CMC|CM3|CMR|CMS|DMC|DLT|MPT|MPD|RMT|TMC|TM8|TM2|ATRAC3|SMAF|AU|VOX|WAVE64|TRUEAUDIO|WMAVOICE|MUSEPACK|AAC-HE|AY|VTX|GBS|HES|SGC|VGM|KSS|OPUS|AAC|UNKNOWN?> %?fv<~>%fbkbps // %?iy<%iy|>
+
+%?or(%if(%fc, =, 4),%if(%fc, =, 5),%if(%fc, =, 7),%if(%fc, =, 11),%if(%fc, =, 13))<%Vd(lossless)>
+%Vl(lossless,10,151,68,16,-)
+%xd(L)
+
+# Playlist Number
+%V(90,1,100,12,2)%Vf(808080)
+%?if(%pp, =, %pe)<%pp %Sx(of) %pe|%aL%pp %Sx(of) %pe|%aL%pp %Sx(of) %pe|%aL%pp %Sx(of) %pe|%aL%pp %Sx(of) %pe>
+
+# Next track
+%V(85,175,60,15,2)%Vf(C3C3C3)
+%ar%Sx(Next Track:)
+%V(10,190,130,15,2)%Vf(C3C3C3)
+%s%ar%?It<%It|%Fn>
+%V(10,205,120,15,2)%Vf(C3C3C3)
+%s%ar%?Ia<%Ia>
